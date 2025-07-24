@@ -2,344 +2,303 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import {
   Plus,
   Users,
-  Receipt,
-  TrendingUp,
-  TrendingDown,
-  Search,
   Bell,
   Settings,
-  CreditCard,
+  ArrowRight,
   Calendar,
-  ArrowUpRight,
-  ArrowDownRight,
-  MoreVertical,
-  DollarSign
+  Search,
+  MapPin,
+  Filter,
+  MoreHorizontal,
+  Star
 } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Input } from '@/components/ui/input';
 
-export default function HomePage() {
+export default function SimpleExpenseApp() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState('all');
 
   // 模擬數據
-  const user = {
-    name: '王小明',
-    avatar: 'WX',
-    totalBalance: -1250,
-    totalOwed: 2100,
-    totalOwing: 3350
+  const trips = [
+    {
+      id: 1,
+      title: '台北三日遊',
+      dates: '2025/08/15 - 2025/08/17',
+      location: '台北, 台灣',
+      progress: 85,
+      image: 'https://images.unsplash.com/photo-1540629372994-b61e99c77256?w=400&h=240&fit=crop',
+      days: 3,
+      attractions: 8,
+      status: 'planning'
+    },
+    {
+      id: 2,
+      title: '京都賞櫻之旅',
+      dates: '2025/04/05 - 2025/04/10',
+      location: '京都, 日本',
+      progress: 45,
+      image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=240&fit=crop',
+      days: 6,
+      attractions: 12,
+      status: 'upcoming'
+    },
+    {
+      id: 3,
+      title: '巴黎浪漫假期',
+      dates: '2025/09/20 - 2025/09/25',
+      location: '巴黎, 法國',
+      progress: 20,
+      image: 'https://images.unsplash.com/photo-1502602898536-47ad22581b52?w=400&h=240&fit=crop',
+      days: 6,
+      attractions: 15,
+      status: 'draft'
+    }
+  ];
+
+  const popularDestinations = [
+    { name: '台北101', location: '台北', rating: 4.8, image: 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=200&h=200&fit=crop', category: '地標' },
+    { name: '清水寺', location: '京都', rating: 4.9, image: 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=200&h=200&fit=crop', category: '寺廟' },
+    { name: '艾菲爾鐵塔', location: '巴黎', rating: 4.7, image: 'https://images.unsplash.com/photo-1549144511-f099e773c147?w=200&h=200&fit=crop', category: '地標' },
+    { name: '九份老街', location: '新北', rating: 4.6, image: 'https://images.unsplash.com/photo-1559592413-b967e0a0826e?w=200&h=200&fit=crop', category: '老街' }
+  ];
+
+  const recentSearches = ['台北美食', '京都神社', '巴黎博物館', '東京購物'];
+
+  interface Trip {
+    id: number;
+    title: string;
+    dates: string;
+    location: string;
+    progress: number;
+    image: string;
+    days: number;
+    attractions: number;
+    status: 'planning' | 'upcoming' | 'draft' | string;
+  }
+
+  interface Destination {
+    name: string;
+    location: string;
+    rating: number;
+    image: string;
+    category: string;
+  }
+
+  const getStatusBadge = (status: Trip['status']): React.ReactNode => {
+    switch (status) {
+      case 'upcoming':
+        return <Badge variant="default">即將開始</Badge>;
+      case 'planning':
+        return <Badge variant="secondary">規劃中</Badge>;
+      case 'draft':
+        return <Badge variant="outline">草稿</Badge>;
+      default:
+        return null;
+    }
   };
 
-  const recentGroups = [
-    {
-      id: 1,
-      name: '日本旅遊',
-      members: 5,
-      totalExpenses: 45680,
-      yourBalance: -1250,
-      lastActivity: '2小時前',
-      color: 'bg-blue-100'
-    },
-    {
-      id: 2,
-      name: '室友分帳',
-      members: 3,
-      totalExpenses: 12500,
-      yourBalance: 450,
-      lastActivity: '1天前',
-      color: 'bg-green-100'
-    },
-    {
-      id: 3,
-      name: '聚餐群',
-      members: 8,
-      totalExpenses: 3200,
-      yourBalance: -180,
-      lastActivity: '3天前',
-      color: 'bg-purple-100'
-    }
-  ];
-
-  const recentTransactions = [
-    {
-      id: 1,
-      description: '便利商店購物',
-      amount: -320,
-      group: '室友分帳',
-      paidBy: '李小華',
-      date: '今天 14:30',
-      category: 'shopping'
-    },
-    {
-      id: 2,
-      description: '晚餐 - 火鍋店',
-      amount: -1200,
-      group: '聚餐群',
-      paidBy: '你',
-      date: '昨天 19:45',
-      category: 'food'
-    },
-    {
-      id: 3,
-      description: '電費分攤',
-      amount: -850,
-      group: '室友分帳',
-      paidBy: '張小美',
-      date: '3天前',
-      category: 'utilities'
-    },
-    {
-      id: 4,
-      description: '機票',
-      amount: -8500,
-      group: '日本旅遊',
-      paidBy: '你',
-      date: '5天前',
-      category: 'travel'
-    }
-  ];
-
-  const quickActions = [
-    { icon: <Plus className="h-5 w-5" />, label: '新增支出', color: 'bg-black' },
-    { icon: <Users className="h-5 w-5" />, label: '建立群組', color: 'bg-gray-600' },
-    { icon: <Receipt className="h-5 w-5" />, label: '掃描收據', color: 'bg-gray-600' },
-    { icon: <CreditCard className="h-5 w-5" />, label: '結算', color: 'bg-gray-600' }
-  ];
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="px-6 py-6 max-w-7xl mx-auto">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-black mb-2">嗨，{user.name}！</h2>
-          <p className="text-gray-600">這是你今天的分帳概況</p>
+    <div className="flex flex-col flex-grow flex-shrink basis-0 rounded-md border overflow-hidden liquid-glass">
+      <div className="container mx-auto px-4 py-2">
+        <div className="mb-4">
+          <h2 className="text-3xl font-bold tracking-tight mb-2">歡迎回來！</h2>
+          <p className="text-primary text-lg">讓我們繼續規劃你的精彩旅程</p>
         </div>
 
-        {/* Balance Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card className={`border-2 ${user.totalBalance < 0 ? 'border-red-200 bg-red-50' : user.totalBalance > 0 ? 'border-green-200 bg-green-50' : 'border-gray-200'}`}>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600 mb-1">總餘額</p>
-                  <p className={`text-2xl font-bold ${user.totalBalance < 0 ? 'text-red-600' : user.totalBalance > 0 ? 'text-green-600' : 'text-gray-900'}`}>
-                    ${Math.abs(user.totalBalance).toLocaleString()}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    {user.totalBalance < 0 ? '你欠別人' : user.totalBalance > 0 ? '別人欠你' : '已結清'}
-                  </p>
-                </div>
-                <div className={`p-3 rounded-full ${user.totalBalance < 0 ? 'bg-red-100' : user.totalBalance > 0 ? 'bg-green-100' : 'bg-gray-100'}`}>
-                  {user.totalBalance < 0 ?
-                    <ArrowDownRight className="h-6 w-6 text-red-600" /> :
-                    user.totalBalance > 0 ?
-                      <ArrowUpRight className="h-6 w-6 text-green-600" /> :
-                      <DollarSign className="h-6 w-6 text-gray-600" />
-                  }
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border border-green-200 bg-green-50">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600 mb-1">別人欠你</p>
-                  <p className="text-2xl font-bold text-green-600">${user.totalOwed.toLocaleString()}</p>
-                  <p className="text-xs text-gray-500 mt-1">來自 3 個群組</p>
-                </div>
-                <div className="p-3 rounded-full bg-green-100">
-                  <TrendingUp className="h-6 w-6 text-green-600" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border border-red-200 bg-red-50">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600 mb-1">你欠別人</p>
-                  <p className="text-2xl font-bold text-red-600">${user.totalOwing.toLocaleString()}</p>
-                  <p className="text-xs text-gray-500 mt-1">來自 2 個群組</p>
-                </div>
-                <div className="p-3 rounded-full bg-red-100">
-                  <TrendingDown className="h-6 w-6 text-red-600" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="mb-8">
-          <h3 className="text-lg font-semibold text-black mb-4">快速操作</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {quickActions.map((action, index) => (
-              <Button
-                key={index}
-                variant="outline"
-                className={`h-16 flex flex-col items-center space-y-2 ${index === 0
-                  ? 'bg-black text-white border-black hover:bg-gray-800'
-                  : 'hover:bg-gray-50'
-                  }`}
-              >
-                {action.icon}
-                <span className="text-sm">{action.label}</span>
-              </Button>
-            ))}
+        <div className="mb-4">
+          <div className="relative max-w-2xl">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="搜尋景點、城市或行程..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 text-base h-12"
+            />
           </div>
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Recent Groups */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle>最近群組</CardTitle>
-                <Button variant="ghost" size="sm">查看全部</Button>
+        <div className="mb-4 flex flex-wrap gap-3">
+          <Button size="lg" className="h-12">
+            <Plus className="mr-2 h-5 w-5" />
+            新增行程
+          </Button>
+          <Button variant="outline" size="lg" className="h-12">
+            <Search className="mr-2 h-5 w-5" />
+            探索景點
+          </Button>
+          <Button variant="outline" size="lg" className="h-12">
+            <MapPin className="mr-2 h-5 w-5" />
+            我的地圖
+          </Button>
+        </div>
+
+        <Tabs defaultValue="trips" className="w-full">
+          <TabsList className="grid w-full max-w-md grid-cols-2">
+            <TabsTrigger value="trips">我的行程</TabsTrigger>
+            <TabsTrigger value="discover">探索景點</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="trips" className="">
+            <div className="mb-2 flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <Select value={selectedFilter} onValueChange={setSelectedFilter}>
+                  <SelectTrigger className="w-40">
+                    <SelectValue placeholder="篩選行程" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">所有行程</SelectItem>
+                    <SelectItem value="upcoming">即將到來</SelectItem>
+                    <SelectItem value="planning">規劃中</SelectItem>
+                    <SelectItem value="past">已結束</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button variant="outline" size="sm">
+                  <Filter className="mr-2 h-4 w-4" />
+                  更多篩選
+                </Button>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {recentGroups.map((group) => (
-                  <div key={group.id} className="flex items-center justify-between p-4 border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
-                    <div className="flex items-center space-x-4">
-                      <div className={`w-12 h-12 ${group.color} rounded-lg flex items-center justify-center`}>
-                        <Users className="h-6 w-6 text-gray-700" />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-black">{group.name}</h4>
-                        <p className="text-sm text-gray-500">{group.members} 位成員 • {group.lastActivity}</p>
-                        <p className="text-sm text-gray-600">總支出: ${group.totalExpenses.toLocaleString()}</p>
-                      </div>
+              <p className="text-sm text-muted-foreground">共 {trips.length} 個行程</p>
+            </div>
+
+
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {trips.map((trip) => (
+                <Card key={trip.id} className="overflow-hidden transition-all hover:shadow-lg">
+                  <div className="relative">
+                    <img
+                      src={trip.image}
+                      alt={trip.title}
+                      className="h-48 w-full object-cover"
+                    />
+                    <div className="absolute right-2 top-2">
+                      {getStatusBadge(trip.status)}
                     </div>
-                    <div className="text-right">
-                      <p className={`font-semibold ${group.yourBalance < 0 ? 'text-red-600' : 'text-green-600'}`}>
-                        {group.yourBalance < 0 ? '-' : '+'}${Math.abs(group.yourBalance).toLocaleString()}
-                      </p>
-                      <Badge variant={group.yourBalance < 0 ? "destructive" : "default"} className="text-xs mt-1">
-                        {group.yourBalance < 0 ? '你欠' : '欠你'}
+                  </div>
+                  <CardHeader className="">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <CardTitle className="text-2xl">{trip.title}</CardTitle>
+                        <CardDescription className="flex items-center mt-1">
+                          <MapPin className="mr-1 h-3 w-3 text-primary" />
+                          {trip.location}
+                        </CardDescription>
+                      </div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="sm">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem>編輯行程</DropdownMenuItem>
+                          <DropdownMenuItem>分享行程</DropdownMenuItem>
+                          <DropdownMenuItem className="text-destructive">刪除行程</DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pb-3">
+                    <div className="flex items-center text-base text-muted-foreground mb-3">
+                      <Calendar className="mr-1 h-3 w-3 text-primary" />
+                      {trip.dates}
+                    </div>
+
+                  </CardContent>
+                  <CardFooter className="flex justify-between pt-0">
+                    <div className="flex space-x-4 text-sm text-muted-foreground">
+                      <span>{trip.days} 天</span>
+                      <span>{trip.attractions} 個景點</span>
+                    </div>
+                    <Button variant="ghost" size="sm" className="text-primary">
+                      查看詳情
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="discover" className="mt-4">
+            <div className="mb-8">
+              <h3 className="mb-4 text-lg font-semibold">最近搜尋</h3>
+              <div className="flex flex-wrap gap-2">
+                {recentSearches.map((search, index) => (
+                  <Badge key={index} variant="secondary" className="cursor-pointer hover:bg-secondary/80">
+                    {search}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+
+            {/* Popular Destinations */}
+            <div>
+              <div className="mb-4 flex items-center justify-between">
+                <h3 className="text-lg font-semibold">熱門景點</h3>
+                <Button variant="ghost" size="sm">
+                  查看全部
+                </Button>
+              </div>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {popularDestinations.map((destination, index) => (
+                  <Card key={index} className="overflow-hidden transition-all hover:shadow-md cursor-pointer">
+                    <div className="relative">
+                      <img
+                        src={destination.image}
+                        alt={destination.name}
+                        className="h-32 w-full object-cover"
+                      />
+                      <Badge className="absolute right-2 top-2" variant="secondary">
+                        {destination.category}
                       </Badge>
                     </div>
-                  </div>
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h4 className="font-semibold">{destination.name}</h4>
+                          <p className="text-sm text-muted-foreground">{destination.location}</p>
+                        </div>
+                        <div className="flex items-center">
+                          <Star className="mr-1 h-3 w-3 fill-yellow-400 text-yellow-400" />
+                          <span className="text-xs font-medium">{destination.rating}</span>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 ))}
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Recent Transactions */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle>最近交易</CardTitle>
-                <Button variant="ghost" size="sm">查看全部</Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {recentTransactions.map((transaction) => (
-                  <div key={transaction.id} className="flex items-center justify-between p-4 border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                        <Receipt className="h-5 w-5 text-gray-600" />
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-black">{transaction.description}</h4>
-                        <p className="text-sm text-gray-500">{transaction.group} • 由 {transaction.paidBy} 支付</p>
-                        <p className="text-xs text-gray-400">{transaction.date}</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-semibold text-red-600">
-                        ${Math.abs(transaction.amount).toLocaleString()}
-                      </p>
-                      <Button variant="ghost" size="sm" className="p-1">
-                        <MoreVertical className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Bottom Section */}
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Monthly Summary */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Calendar className="h-5 w-5" />
-                <span>本月摘要</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">總支出</span>
-                  <span className="font-semibold">$12,450</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">新增群組</span>
-                  <span className="font-semibold">2 個</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">交易筆數</span>
-                  <span className="font-semibold">28 筆</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">已結算金額</span>
-                  <span className="font-semibold text-green-600">$3,200</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Pending Settlements */}
-          <Card>
-            <CardHeader>
-              <CardTitle>待結算</CardTitle>
-              <CardDescription>需要處理的款項</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
-                  <div>
-                    <p className="font-medium text-black">向李小華付款</p>
-                    <p className="text-sm text-gray-500">日本旅遊群組</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-red-600">$1,250</p>
-                    <Button size="sm" className="mt-1 bg-black text-white hover:bg-gray-800">
-                      付款
-                    </Button>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                  <div>
-                    <p className="font-medium text-black">張小美欠款</p>
-                    <p className="text-sm text-gray-500">室友分帳群組</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-green-600">$450</p>
-                    <Button size="sm" variant="outline" className="mt-1">
-                      提醒
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

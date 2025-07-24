@@ -1,22 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Separator } from "@/components/ui/separator"
+import { SidebarProvider } from "@/components/ui/sidebar"
+
+import { useTheme } from "next-themes"
 import { AppSidebar } from "@/components/app-sidebar"
 import "../globals.css";
 import AuthProvider from "@/components/auth-provider";
-import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
-import { logout } from "@/actions/auth";
-import LogoutBtn from "./components/logout-btn";
+import Header from "./components/header";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,38 +29,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
-          <SidebarProvider>
+          <SidebarProvider defaultOpen={false}>
             <AppSidebar />
-            <main>
-              <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-                <div className="flex items-center gap-2 px-4">
-                  <SidebarTrigger className="-ml-1" />
-                  <Separator
-                    orientation="vertical"
-                    className="mr-2 data-[orientation=vertical]:h-4"
-                  />
-                  <Breadcrumb>
-                    <BreadcrumbList>
-                      <BreadcrumbItem className="hidden md:block">
-                        <BreadcrumbLink href="#" className="text-2xl font-bold text-black">
-                          Split-Wizard
-                        </BreadcrumbLink>
-                      </BreadcrumbItem>
-                      <BreadcrumbSeparator className="hidden md:block" />
-                      <BreadcrumbItem>
-                        <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                      </BreadcrumbItem>
-                    </BreadcrumbList>
-                  </Breadcrumb>
-                </div>
-                <LogoutBtn />
-              </header>
+            <main className="flex-1 flex flex-col p-4 pt-0">
+              <Header />
               {children}
             </main>
           </SidebarProvider>
