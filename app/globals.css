@@ -153,12 +153,73 @@
 }
 
 .liquid-glass {
+  background: oklch(0.9647 0.0176 99.34 / 0.36);
+  /* 你的 liquid 底色 */
   backdrop-filter: blur(24px) saturate(180%) brightness(1.2);
   -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(1.2);
   border: 1.5px solid rgba(255, 255, 255, 0.35);
-  /* border-radius: 24px; */
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+  box-shadow: 0 4px 32px 0 rgba(31, 38, 135, 0.18);
   color: rgba(30, 30, 40, 0.95);
   padding: 2rem;
   overflow: hidden;
+  border-radius: 24px;
+  /* 動畫過渡效果：所有視覺屬性和 transform 做 0.25s 緩動 */
+  transition:
+    background 0.4s cubic-bezier(.33, 1.02, .64, 1),
+    border 0.24s,
+    box-shadow 0.36s,
+    backdrop-filter 0.36s,
+    -webkit-backdrop-filter 0.36s,
+    transform 0.4s cubic-bezier(.33, 1.02, .64, 1);
+}
+
+.liquid-glass:hover {
+  /* 發光高光＋更閃亮的玻璃背景 */
+  background: oklch(0.9647 0.025 99.34 / 0.44);
+  /* 更亮＋飽和一點的 liquid */
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  /* 更明顯的白色高光邊 */
+  box-shadow:
+    0 8px 36px 0 rgba(31, 38, 135, 0.22),
+    0 0 16px 4px rgba(255, 255, 255, 0.08);
+  /* 還可以加一層微亮暈 */
+  backdrop-filter: blur(30px) saturate(210%) brightness(1.25);
+  -webkit-backdrop-filter: blur(30px) saturate(210%) brightness(1.25);
+  /* 微縮放帶彈性 */
+  transform: scale(1.022);
+}
+
+.liquid-glass-nonhover {
+  background: oklch(0.9647 0.0176 99.34 / 0.36);
+  backdrop-filter: blur(24px) saturate(180%) brightness(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(1.2);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 4px 32px 0 rgba(31, 38, 135, 0.18);
+  color: rgba(30, 30, 40, 0.95);
+  padding: 2rem;
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+@layer utilities {
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.10) transparent;
+    /* 對 Firefox doing thin thumb */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.13);
+    border-radius: 1em;
+    transition: background 0.2s;
+  }
+
+  .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.24);
+  }
 }
