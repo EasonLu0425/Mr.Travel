@@ -143,20 +143,20 @@ export default function SimpleExpenseApp() {
 
   const recentSearches = ['台北美食', '京都神社', '巴黎博物館', '東京購物'];
 
-  const getStatusBadge = (status) => {
+  const getStatusBadge = (status: string) => {
     switch (status) {
       case 'upcoming':
         return <Badge variant="default">即將開始</Badge>;
       case 'planning':
         return <Badge variant="secondary">規劃中</Badge>;
-      case 'draft':
-        return <Badge variant="outline">草稿</Badge>;
+      case 'finished':
+        return <Badge variant="outline">已結束</Badge>;
       default:
         return null;
     }
   };
   return (
-    <div className="flex flex-col flex-grow flex-shrink basis-0 rounded-md border overflow-hidden liquid-glass-nonhover">
+    <div className="flex flex-col flex-grow flex-shrink sm:basis-0 rounded-md border sm:overflow-hidden liquid-glass-nonhover">
       <div className="container flex-1 flex flex-col">
         {/* Welcome Section */}
         <div className="mb-4 sm:mb-4">
@@ -179,17 +179,13 @@ export default function SimpleExpenseApp() {
 
         {/* Quick Actions */}
         <div className="mb-4 sm:mb-4 flex flex-wrap gap-2 sm:gap-3">
-          <Button size="sm" className="h-10 sm:h-12 text-xs sm:text-sm">
+          <Button size="sm" className="h-10 md:h-12 text-xs md:text-sm">
             <Plus className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
             新增行程
           </Button>
-          <Button variant="outline" size="sm" className="h-10 sm:h-12 text-xs sm:text-sm">
+          <Button variant="outline" size="sm" className="h-10 md:h-12 text-xs md:text-sm">
             <Search className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
             探索景點
-          </Button>
-          <Button variant="outline" size="sm" className="h-10 sm:h-12 text-xs sm:text-sm">
-            <MapPin className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-            我的地圖
           </Button>
         </div>
         <div className="flex-1 flex flex-col">
@@ -223,17 +219,17 @@ export default function SimpleExpenseApp() {
               </div>
 
               {/* Trip Cards */}
-              <div className="flex-grow flex-shrink basis-0 p-8 overflow-auto overflow-x-hidden custom-scrollbar">
+              <div className="flex-grow flex-shrink sm:basis-0 p-4 md:p-8 overflow-auto overflow-x-hidden custom-scrollbar">
                 <div className="flex flex-col gap-2">
                   {trips.map((trip) => (
                     <Card key={trip.id} className="flex flex-row overflow-hidden transition-all hover:shadow-lg relative">
                       {/* 狀態 Badge 放在右上角 */}
-                      <div className="absolute right-2 top-2 z-10">
+                      <div className="absolute right-4 top-2 z-10">
                         {getStatusBadge(trip.status)}
                       </div>
 
                       {/* 左側圖片區 */}
-                      <div className="w-32 sm:w-40 h-auto flex-shrink-0">
+                      <div className="w-32 hidden sm:block h-auto flex-shrink-0">
                         <img src={trip.image} alt={trip.title} className="w-full h-full object-cover" />
                       </div>
 
@@ -300,7 +296,7 @@ export default function SimpleExpenseApp() {
               </div>
             </TabsContent>
 
-            <TabsContent value="discover" className="mt-2 min-h-0 sm:mt-2 flex-1 overflow-auto">
+            <TabsContent value="discover" className="mt-2 min-h-0 sm:mt-2 flex-1 flex flex-col">
               {/* Recent Searches */}
               <div className="mb-6 sm:mb-8">
                 <h3 className="mb-3 sm:mb-4 text-base sm:text-lg font-semibold">最近搜尋</h3>
@@ -314,58 +310,60 @@ export default function SimpleExpenseApp() {
               </div>
 
               {/* Trip-based Recommendations */}
-              <div className="space-y-6 sm:space-y-8">
-                {trips.map((trip) => (
-                  <div key={trip.id}>
-                    <div className="mb-3 sm:mb-4 flex items-center justify-between">
-                      <div className="flex items-center space-x-2 sm:space-x-3">
-                        <img
-                          src={trip.image}
-                          alt={trip.title}
-                          className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg object-cover"
-                        />
-                        <div className="min-w-0 flex-1">
-                          <h3 className="text-base sm:text-lg font-semibold truncate">{trip.city} 推薦景點</h3>
-                          <p className="text-xs sm:text-sm text-muted-foreground truncate">為你的 {trip.title} 精選</p>
-                        </div>
-                      </div>
-                      <Button variant="ghost" size="sm" className="text-xs sm:text-sm flex-shrink-0">
-                        查看全部
-                        <ChevronRight className="ml-1 h-3 w-3 sm:h-4 sm:w-4" />
-                      </Button>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-                      {recommendationsByCity[trip.city]?.map((destination, index) => (
-                        <Card key={index} className="overflow-hidden transition-all hover:shadow-md cursor-pointer">
-                          <div className="relative">
-                            <img
-                              src={destination.image}
-                              alt={destination.name}
-                              className="h-24 sm:h-32 w-full object-cover"
-                            />
-                            <Badge className="absolute right-1 sm:right-2 top-1 sm:top-2 text-xs" variant="secondary">
-                              {destination.category}
-                            </Badge>
+              <div className="flex-grow flex-shrink sm:basis-0 p-4 md:p-8 overflow-auto overflow-x-hidden custom-scrollbar">
+                <div className="flex flex-col gap-2 space-y-6 sm:space-y-8">
+                  {trips.map((trip) => (
+                    <div key={trip.id}>
+                      <div className="mb-3 sm:mb-4 flex items-center justify-between">
+                        <div className="flex items-center space-x-2 sm:space-x-3">
+                          <img
+                            src={trip.image}
+                            alt={trip.title}
+                            className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg object-cover"
+                          />
+                          <div className="min-w-0 flex-1">
+                            <h3 className="text-base sm:text-lg font-semibold truncate">{trip.city} 推薦景點</h3>
+                            <p className="text-xs sm:text-sm text-muted-foreground truncate">為你的 {trip.title} 精選</p>
                           </div>
-                          <CardContent className="p-2 sm:p-4">
-                            <div className="space-y-1 sm:space-y-2">
-                              <div className="flex items-start justify-between gap-2">
-                                <div className="min-w-0 flex-1">
-                                  <h4 className="font-semibold text-sm sm:text-base truncate">{destination.name}</h4>
-                                  <p className="text-xs sm:text-sm text-muted-foreground truncate">{destination.description}</p>
-                                </div>
-                                <div className="flex items-center flex-shrink-0">
-                                  <Star className="mr-1 h-3 w-3 fill-yellow-400 text-yellow-400" />
-                                  <span className="text-xs font-medium">{destination.rating}</span>
+                        </div>
+                        <Button variant="ghost" size="sm" className="text-xs sm:text-sm flex-shrink-0">
+                          查看全部
+                          <ChevronRight className="ml-1 h-3 w-3 sm:h-4 sm:w-4" />
+                        </Button>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+                        {recommendationsByCity[trip.city]?.map((destination, index) => (
+                          <Card key={index} className="overflow-hidden transition-all hover:shadow-md cursor-pointer">
+                            <div className="relative">
+                              <img
+                                src={destination.image}
+                                alt={destination.name}
+                                className="h-24 sm:h-32 w-full object-cover"
+                              />
+                              <Badge className="absolute right-1 sm:right-2 top-1 sm:top-2 text-xs" variant="secondary">
+                                {destination.category}
+                              </Badge>
+                            </div>
+                            <CardContent className="p-2 sm:p-4">
+                              <div className="space-y-1 sm:space-y-2">
+                                <div className="flex items-start justify-between gap-2">
+                                  <div className="min-w-0 flex-1">
+                                    <h4 className="font-semibold text-sm sm:text-base truncate">{destination.name}</h4>
+                                    <p className="text-xs sm:text-sm text-muted-foreground truncate">{destination.description}</p>
+                                  </div>
+                                  <div className="flex items-center flex-shrink-0">
+                                    <Star className="mr-1 h-3 w-3 fill-yellow-400 text-yellow-400" />
+                                    <span className="text-xs font-medium">{destination.rating}</span>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </TabsContent>
           </Tabs>

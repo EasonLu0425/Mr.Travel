@@ -91,7 +91,7 @@
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
 
-  --sidebar: oklch(0.9647 0.0176 99.34 / 0.36);
+  --sidebar: oklch(0.9647 0.0176 99.34);
   --sidebar-foreground: oklch(0.1974 0.0132 267.63);
   --sidebar-primary: oklch(0.6273 0.2116 26.64);
   --sidebar-primary-foreground: oklch(0.985 0 0);
@@ -222,4 +222,24 @@
   .custom-scrollbar:hover::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.24);
   }
+}
+
+.my-marker {
+  position: relative;
+  /* background: #1976d2; */
+  color: #fff;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 15px;
+  border: 2px solid #fff;
+  box-shadow: 0 0 4px #3332;
+}
+
+.leaflet-routing-container {
+  display: none !important;
 }

@@ -38,7 +38,7 @@ export default function RootLayout({
         <AuthProvider>
           <SidebarProvider defaultOpen={false}>
             <AppSidebar />
-            <main className="flex-1 flex flex-col p-4 pt-0">
+            <main className="relative flex-1 flex flex-col p-4 pt-0">
               <Header />
               {children}
             </main>

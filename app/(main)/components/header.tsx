@@ -1,4 +1,5 @@
 "use client"
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -20,11 +21,26 @@ import { Bell, Moon, Settings, Sun } from "lucide-react";
 import LogoutBtn from "./logout-btn";
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { useTheme } from "next-themes"
+import { useEffect, useState } from "react"
+import { cn } from "@/lib/utils"
 
 const Header = () => {
   const { setTheme } = useTheme()
+  const [atTop, setAtTop] = useState(true);
+
+  useEffect(() => {
+    const handler = () => setAtTop(window.scrollY < 10);
+    window.addEventListener('scroll', handler);
+    return () => window.removeEventListener('scroll', handler);
+  }, []);
+
   return (
-    <header className="flex justify-between h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+    <header
+      className={cn(
+        "sticky top-0 flex justify-between h-16 shrink-0 items-center gap-2 transition-colors duration-300 ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 z-50",
+        atTop ? "bg-transparent" : "bg-background/80 backdrop-blur"
+      )}
+    >
       <div className="flex items-center gap-2 px-4">
         <SidebarTrigger className="-ml-1" />
         <Separator
@@ -33,7 +49,7 @@ const Header = () => {
         />
         <Breadcrumb>
           <BreadcrumbList>
-            <BreadcrumbItem className="hidden md:block">
+            <BreadcrumbItem className="block">
               <BreadcrumbLink href="#" className="text-2xl font-bold text-black inline-flex">
                 <p className="text-muted-foreground"> Mr.</p> <p className="text-primary">Travel</p>
               </BreadcrumbLink>
