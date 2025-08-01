@@ -17,7 +17,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import Image from "next/image";
-import { CircleDollarSign, Copy, FileText, GripHorizontal, GripVertical, Trash2 } from "lucide-react";
+import { CircleDollarSign, Copy, FileText, GripHorizontal, GripVertical, Trash2, Image as Picture } from "lucide-react";
 
 
 const ControlPanel = () => {
@@ -120,6 +120,12 @@ const ControlPanel = () => {
                   <CircleDollarSign />
                 </Button>
                 <p className="text-sm font-bold">花費</p>
+              </div>
+              <div className="flex flex-col items-center justify-center gap-1">
+                <Button size="icon" variant="outline">
+                  <Picture />
+                </Button>
+                <p className="text-sm font-bold">上傳</p>
               </div>
               <div className="flex flex-col items-center justify-center gap-1">
                 <Button size="icon" variant="outline">
