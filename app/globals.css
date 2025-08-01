@@ -162,7 +162,6 @@
   color: rgba(30, 30, 40, 0.95);
   padding: 2rem;
   overflow: hidden;
-  border-radius: 24px;
   /* 動畫過渡效果：所有視覺屬性和 transform 做 0.25s 緩動 */
   transition:
     background 0.4s cubic-bezier(.33, 1.02, .64, 1),
@@ -190,7 +189,7 @@
 }
 
 .liquid-glass-nonhover {
-  background: oklch(0.9647 0.0176 99.34 / 0.36);
+  background: oklch(0.9647 0.0176 99.34 / 0.44);
   backdrop-filter: blur(24px) saturate(180%) brightness(1.2);
   -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(1.2);
   border: 1.5px solid rgba(255, 255, 255, 0.35);
@@ -198,7 +197,6 @@
   color: rgba(30, 30, 40, 0.95);
   padding: 2rem;
   overflow: hidden;
-  border-radius: 24px;
 }
 
 @layer utilities {

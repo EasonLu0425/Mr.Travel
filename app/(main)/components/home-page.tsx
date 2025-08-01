@@ -49,6 +49,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from '@/components/ui/input';
+import Image from 'next/image';
 
 export default function SimpleExpenseApp() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -222,7 +223,7 @@ export default function SimpleExpenseApp() {
               <div className="flex-grow flex-shrink sm:basis-0 p-4 md:p-8 overflow-auto overflow-x-hidden custom-scrollbar">
                 <div className="flex flex-col gap-2">
                   {trips.map((trip) => (
-                    <Card key={trip.id} className="flex flex-row overflow-hidden transition-all hover:shadow-lg relative">
+                    <Card key={trip.id} className="flex flex-row overflow-hidden transition-all hover:shadow-lg relative liquid-glass">
                       {/* 狀態 Badge 放在右上角 */}
                       <div className="absolute right-4 top-2 z-10">
                         {getStatusBadge(trip.status)}
@@ -230,7 +231,7 @@ export default function SimpleExpenseApp() {
 
                       {/* 左側圖片區 */}
                       <div className="w-32 hidden sm:block h-auto flex-shrink-0">
-                        <img src={trip.image} alt={trip.title} className="w-full h-full object-cover" />
+                        <Image src={trip.image} alt={trip.title} width={40} height={40} className="w-full h-full object-cover" />
                       </div>
 
                       {/* 右側內容區 */}
@@ -316,9 +317,11 @@ export default function SimpleExpenseApp() {
                     <div key={trip.id}>
                       <div className="mb-3 sm:mb-4 flex items-center justify-between">
                         <div className="flex items-center space-x-2 sm:space-x-3">
-                          <img
+                          <Image
                             src={trip.image}
                             alt={trip.title}
+                            width={40}
+                            height={40}
                             className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg object-cover"
                           />
                           <div className="min-w-0 flex-1">
@@ -333,11 +336,13 @@ export default function SimpleExpenseApp() {
                       </div>
                       <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
                         {recommendationsByCity[trip.city]?.map((destination, index) => (
-                          <Card key={index} className="overflow-hidden transition-all hover:shadow-md cursor-pointer">
+                          <Card key={index} className="overflow-hidden transition-all hover:shadow-md cursor-pointer liquid-glass">
                             <div className="relative">
-                              <img
+                              <Image
                                 src={destination.image}
                                 alt={destination.name}
+                                width={40}
+                                height={40}
                                 className="h-24 sm:h-32 w-full object-cover"
                               />
                               <Badge className="absolute right-1 sm:right-2 top-1 sm:top-2 text-xs" variant="secondary">

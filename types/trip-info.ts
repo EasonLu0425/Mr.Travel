@@ -5,15 +5,17 @@ type Trip = {
   endDate: string;
   itineraries: Itinerary[];
   status: "editing" | "upcoming" | "passed";
-
 }
 
-type Itinerary = {
+interface Itinerary {
   id: string;
   date: string;
   places: Place[];
+  route: string | null; // JSON string of route data
+}
+
+interface ItineraryWithColor extends Itinerary {
   color: string;
-  route?: string; // JSON string of route data
 }
 
 type Place = {
@@ -22,3 +24,5 @@ type Place = {
   description?: string;
   imageUrl?: string[];
 };
+
+

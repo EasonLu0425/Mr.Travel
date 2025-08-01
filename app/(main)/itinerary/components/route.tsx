@@ -11,7 +11,7 @@ type Place = {
   position: LatLngTuple;
 };
 
-export default function Routing({ places }: { places: Place[] }) {
+export default function Routing({ places, color }: { places: Place[], color: string }) {
   const map = useMap();
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function Routing({ places }: { places: Place[] }) {
     const routingControl = L.Routing.control({
       waypoints: places.map((p) => L.latLng(p.position[0], p.position[1])),
       lineOptions: {
-        styles: [{ color: "#1976d2", opacity: 0.6, weight: 10 }],
+        styles: [{ color: color, opacity: 0.8, weight: 10 }],
       },
       routeWhileDragging: false,
       show: false,
